@@ -20,7 +20,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
 
-    //variables for Time Button
+    //variable for Time Button
     private Button timeButton;
     int hour;
     int minuete;
