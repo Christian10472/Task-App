@@ -22,10 +22,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.07" />
 
+    <!--Date Button-->
     <Button
         android:id="@+id/datePickerButton"
         style="?android:spinnerStyle"
-        android:layout_width="195dp"
+        android:layout_width="185dp"
         android:layout_height="48dp"
         android:onClick="openDatePicker"
         android:text="JAN 01 2022"
@@ -38,6 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.219" />
 
+    <!--Time Selection button-->
     <Button
         android:id="@+id/timeButton"
         android:layout_width="160dp"
@@ -46,12 +48,57 @@
         android:text="Set Time"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.218" />
+
+    <!--Task Type Button-->
+
+    <Spinner
+        android:id="@+id/typeSpinner"
+        android:layout_width="184dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="216dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="224dp"
+        android:text="Task Type:"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/prioritySpinner"
+        android:layout_width="184dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="292dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="292dp"
+        android:text="Task Priority:"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

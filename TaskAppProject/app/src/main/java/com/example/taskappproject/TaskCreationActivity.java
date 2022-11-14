@@ -7,8 +7,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -30,13 +32,27 @@ public class TaskCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_creation);
 
-        //Date Button Code
+        //Date Button reference
         initDatePicker();
         dateButton = findViewById(R.id.datePickerButton);
         dateButton.setText(getTodaysDate());
 
-        //Time Button code
+        //Time Button reference
         timeButton = findViewById(R.id.timeButton);
+
+        //Task type spinner Reference
+        Spinner spinner = findViewById(R.id.typeSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.taskType, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        //Task priority spinner Reference
+        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.taskPriority, android.R.layout.simple_spinner_item);
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(priorityAdapter);
 
     }
 
@@ -50,7 +66,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     }
 
     private void initDatePicker(){
-        DatePickerDialog.OnDateSetListener dateSetListener  = new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;

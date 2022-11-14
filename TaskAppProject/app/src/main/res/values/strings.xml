@@ -4,4 +4,21 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_calendar">Calendar</string> />
+
+    <!--TaskType Menu selection-->
+    <string-array name="taskType">
+        <item>None</item>
+        <item>Family</item>
+        <item>Work</item>
+        <item>School</item>
+        <item>Personal</item>
+    </string-array>
+
+    <!--TaskType Menu selection-->
+    <string-array name="taskPriority">
+        <item>None</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
 </resources>
