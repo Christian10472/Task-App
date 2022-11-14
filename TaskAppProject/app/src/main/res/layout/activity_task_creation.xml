@@ -7,98 +7,112 @@
     tools:context=".TaskCreationActivity">
 
 
+    <!--Date Button-->
     <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="330dp"
+        android:id="@+id/et_name"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+
+        android:hint="Task Name"
         android:inputType="textPersonName"
         android:paddingStart="12dp"
-        android:text="Task Name"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Date Button-->
+    <!--Time Selection button-->
     <Button
         android:id="@+id/datePickerButton"
         style="?android:spinnerStyle"
-        android:layout_width="185dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:onClick="openDatePicker"
         android:text="JAN 01 2022"
         android:textColor="@color/black"
         android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintEnd_toStartOf="@+id/timeButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.219" />
+        app:layout_constraintTop_toBottomOf="@+id/et_name" />
 
-    <!--Time Selection button-->
     <Button
         android:id="@+id/timeButton"
-        android:layout_width="160dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
         android:onClick="popTimePicker"
         android:text="Set Time"
         android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintStart_toEndOf="@+id/datePickerButton"
+        app:layout_constraintTop_toTopOf="@+id/datePickerButton" />
 
     <!--Task Type Button-->
 
     <Spinner
         android:id="@+id/typeSpinner"
         android:layout_width="184dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="216dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="160dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="224dp"
-        android:text="Task Type:"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Task type:"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/typeSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
 
     <Spinner
         android:id="@+id/prioritySpinner"
         android:layout_width="184dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="292dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="160dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="292dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Task Priority:"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/prioritySpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Create Task"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
