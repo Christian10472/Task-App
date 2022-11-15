@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     //variables
     EditText et_name;
     DatePickerDialog datePickerDialog;
-    Button dateButton, timeButton, createButton;
+    Button dateButton, timeButton, createButton, reminderButton;
     int hour, minute, year, month, day;
 
     @Override
@@ -81,6 +82,16 @@ public class TaskCreationActivity extends AppCompatActivity {
             }
         });
 
+
+        //Reminder Button
+        reminderButton = (Button) findViewById(R.id.reminderButton);
+        reminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openReminderSetting();
+            }
+        });
+
     }
 
     //Methods for Date Button
@@ -131,5 +142,11 @@ public class TaskCreationActivity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour, minute, true);
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
+    }
+
+    //Method for Reminder Button
+    public void openReminderSetting(){
+        Intent intent = new Intent(this, ReminderSetting.class);
+        startActivity(intent);
     }
 }
