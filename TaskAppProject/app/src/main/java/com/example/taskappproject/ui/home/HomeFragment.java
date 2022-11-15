@@ -7,10 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.example.taskappproject.R;
 import com.example.taskappproject.databinding.FragmentHomeBinding;
+
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
@@ -18,14 +23,21 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        final TextView textView = binding.textHome;
         return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        // Set heading to display today's date
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        String str = DayOfWeek.of(dayOfWeek - 1).name() + ",\n" + Month.of(month + 1).name() + " " + dayOfMonth;
+        TextView todaysDate = view.findViewById(R.id.todaysDateText);
+        todaysDate.setText(str);
     }
 
     @Override
