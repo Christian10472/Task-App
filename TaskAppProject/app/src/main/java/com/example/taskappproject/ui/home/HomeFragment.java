@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
-        String str = DayOfWeek.of(dayOfWeek - 1).name() + ",\n" + Month.of(month + 1).name() + " " + dayOfMonth;
+        String str = DayOfWeek.of(dayOfWeek - 1).name() + ",\n" + Month.of(month).name() + " " + dayOfMonth;
         TextView todaysDate = view.findViewById(R.id.todaysDateText);
         todaysDate.setText(str);
     }
