@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -23,7 +24,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     EditText et_name;
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton;
-    int hour, minute;
+    int hour, minute, year, month, day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +56,39 @@ public class TaskCreationActivity extends AppCompatActivity {
 
         //Create Button reference
         createButton = findViewById(R.id.createButton);
-        /* Button Creation IGNORE FOR NOW
+
+        //Create Task Information
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TaskInformationModel taskInformationModel = new TaskInformationModel(-1, et_name.getText(), );
+
+                TaskInformationModel taskInformationModel;
+
+                try {
+                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "family", "High", month, day, year, hour, minute );
+                    Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_SHORT).show();
+                }catch (Exception e) {
+                    Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0);
+
+                }
+
+                DataBaseHelper dataBaseHelper = new DataBaseHelper(TaskCreationActivity.this);
+
+                boolean success = dataBaseHelper.addOne(taskInformationModel);
+                Toast.makeText(TaskCreationActivity.this, "Success" + success, Toast.LENGTH_SHORT).show();
+
             }
         });
-        */
+
     }
 
     //Methods for Date Button
     private String getTodayDate(){
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;
+        day = cal.get(Calendar.DAY_OF_MONTH);
         return makeDateString(day, month, year);
     }
 
@@ -84,9 +102,9 @@ public class TaskCreationActivity extends AppCompatActivity {
             }
         };
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
         int style = AlertDialog.THEME_HOLO_LIGHT;
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
