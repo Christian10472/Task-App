@@ -1,11 +1,15 @@
 package com.example.taskappproject;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -58,4 +62,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
     };
+
+    @SuppressLint("Range")
+    public ArrayList<TaskInformationModel> getAllTasks(){
+        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from TASK_TABLE",null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                TaskInformationModel task = new TaskInformationModel();
+                task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
+                task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
+                task.setTaskPriority(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_PRIORITY)));
+                task.setMonth(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MONTH)));
+                task.setDay(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_DAY)));
+                task.setYear(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR)));
+                task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
+                task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+                result.add(task);
+                cursor.moveToNext();
+            }
+        }
+        return result;
+    }
+
+    // MICHAEL WILL FINISH THESE LATER
+    public ArrayList<TaskInformationModel> getTasksDueToday(){
+        return null;
+    }
+
+    public ArrayList<TaskInformationModel> getTasksDueThisWeek(){
+        return null;
+    }
 }
