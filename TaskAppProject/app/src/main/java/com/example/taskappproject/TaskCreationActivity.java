@@ -26,6 +26,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton, reminderButton;
     int hour, minute, year, month, day;
+    String taskType, priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +49,14 @@ public class TaskCreationActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        taskType = spinner.getSelectedItem().toString();
 
         //Task priority spinner Reference
         Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(priorityAdapter);
+        priority = prioritySpinner.getSelectedItem().toString();
 
         //Create Button reference
         createButton = findViewById(R.id.createButton);
@@ -64,19 +67,20 @@ public class TaskCreationActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 TaskInformationModel taskInformationModel;
+                boolean success = false;
 
+                //TaskInformation not passing taskType and Priority
                 try {
-                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "family", "High", month, day, year, hour, minute );
+                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "Family", "High", month, day, year, hour, minute );
                     Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_SHORT).show();
+                    success = DataBaseHelper.instance.addOne(taskInformationModel);
                 }catch (Exception e) {
                     Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0);
 
                 }
 
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(TaskCreationActivity.this);
 
-                boolean success = dataBaseHelper.addOne(taskInformationModel);
                 Toast.makeText(TaskCreationActivity.this, "Success" + success, Toast.LENGTH_SHORT).show();
 
             }

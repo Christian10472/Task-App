@@ -27,7 +27,7 @@
         android:layout_marginTop="112dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Due today:"
+        android:text="Due Today:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,8 +39,15 @@
         android:layout_marginTop="364dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Due this week:"
+        android:text="Due This Week:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/todayItemsList"
+        android:layout_width="409dp"
+        android:layout_height="205dp"
+        app:layout_constraintTop_toBottomOf="@+id/dueTodayText"
+        tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
