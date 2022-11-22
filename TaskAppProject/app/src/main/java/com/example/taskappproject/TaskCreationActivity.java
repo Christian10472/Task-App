@@ -33,7 +33,7 @@ public class TaskCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_creation);
 
         //Text reference
-        et_name = findViewById(R.id.et_name);
+        et_name = findViewById(R.id.todaysDateText);
 
         //Date Button reference
         initDatePicker();
@@ -74,9 +74,7 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                 }
 
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(TaskCreationActivity.this);
-
-                boolean success = dataBaseHelper.addOne(taskInformationModel);
+                boolean success = DataBaseHelper.instance.addOne(taskInformationModel);
                 Toast.makeText(TaskCreationActivity.this, "Success" + success, Toast.LENGTH_SHORT).show();
 
             }
