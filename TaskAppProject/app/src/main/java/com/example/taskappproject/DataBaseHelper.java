@@ -66,6 +66,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     };
 
+    //deleting method
+
+
     @SuppressLint("Range")
     public ArrayList<TaskInformationModel> getAllTasks(){
         ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
