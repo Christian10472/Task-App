@@ -24,7 +24,13 @@
         android:id="@+id/calendarView"
         android:layout_width="405dp"
         android:layout_height="380dp"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="3dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="-21dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="409dp"
+        android:layout_height="219dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="344dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
