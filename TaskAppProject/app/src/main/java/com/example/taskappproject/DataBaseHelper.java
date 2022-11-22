@@ -126,6 +126,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    @SuppressLint("Range")
+    public ArrayList<TaskInformationModel> getTasksDueOn(int day, int month, int year){
+        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE,null);
+        for (int count = 0; count < cursor.getCount(); count ++){
+            cursor.moveToPosition(count);
+            int selectedYear = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR));
+            int selectedMonth = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MONTH));
+            int selectedDay = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_DAY));
+            if (selectedDay != day || selectedMonth != month || selectedYear != year) continue;
+            TaskInformationModel task = new TaskInformationModel();
+            task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
+            task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
+            task.setTaskPriority(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_PRIORITY)));
+            task.setMonth(selectedMonth);
+            task.setDay(selectedDay);
+            task.setYear(selectedYear);
+            task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
+            task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+            result.add(task);
+        }
+        cursor.close();
+        return result;
+    }
+
+
     // MICHAEL WILL FINISH THESE LATER
     public ArrayList<TaskInformationModel> getTasksDueThisWeek(){
         return null;
