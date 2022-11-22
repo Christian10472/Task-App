@@ -74,7 +74,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE,null);
-
         for (int count = 0; count < cursor.getCount(); count++){
             cursor.moveToPosition(count);
             TaskInformationModel task = new TaskInformationModel();
@@ -101,7 +100,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         for (int count = 0; count < cursor.getCount(); count ++){

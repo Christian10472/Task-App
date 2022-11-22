@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         todaysDate.setText(str);
 
         // Populate list of items due today
-        ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getAllTasks();
+        ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
         ListView todaysList = view.findViewById(R.id.todayItemsList);
         ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
