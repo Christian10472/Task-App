@@ -99,7 +99,7 @@ public class TaskCreationActivity extends AppCompatActivity {
 
     }
 
-    //Methods for Date Button
+    //Methods for Date Buttons
     private String getTodayDate(){
         Calendar cal = Calendar.getInstance();
         taskYear = cal.get(Calendar.YEAR);
