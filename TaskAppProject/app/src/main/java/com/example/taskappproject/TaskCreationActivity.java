@@ -25,7 +25,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     EditText et_name;
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton, reminderButton;
-    int hour, minute, year, month, day;
+    int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
     String taskType, priority;
 
     @Override
@@ -37,9 +37,10 @@ public class TaskCreationActivity extends AppCompatActivity {
         et_name = findViewById(R.id.et_name);
 
         //Date Button reference
-        initDatePicker();
         dateButton = findViewById(R.id.datePickerButton);
         dateButton.setText(getTodayDate());
+        initDatePicker();
+
 
         //Time Button reference
         timeButton = findViewById(R.id.timeButton);
@@ -71,7 +72,7 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                 //TaskInformation not passing taskType and Priority
                 try {
-                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "Family", "High", month, day, year, hour, minute );
+                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "Family", "High", taskMonth, taskDay, taskYear, hour, minute );
                     Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_SHORT).show();
                     success = DataBaseHelper.instance.addOne(taskInformationModel);
                 }catch (Exception e) {
@@ -101,10 +102,10 @@ public class TaskCreationActivity extends AppCompatActivity {
     //Methods for Date Button
     private String getTodayDate(){
         Calendar cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH) + 1;
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        taskYear = cal.get(Calendar.YEAR);
+        taskMonth = cal.get(Calendar.MONTH) + 1;
+        taskDay = cal.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(taskDay, taskMonth, taskYear);
     }
 
     private void initDatePicker(){
@@ -113,6 +114,9 @@ public class TaskCreationActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
+                taskYear = year;
+                taskMonth = month;
+                taskDay = day;
                 dateButton.setText(date);
             }
         };
