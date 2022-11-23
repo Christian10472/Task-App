@@ -20,14 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="405dp"
-        android:layout_height="380dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="-21dp" />
-
     <ListView
         android:id="@+id/TaskView"
         android:layout_width="409dp"
@@ -36,5 +28,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_calendar" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="405dp"
+        android:layout_height="380dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="-21dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
