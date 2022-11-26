@@ -67,6 +67,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     };
 
     //deleting method
+    public boolean deleteOne(TaskInformationModel taskInformationModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "DELETE FROM " + TASK_TABLE + " WHERE " + COLUMN_ID + " = " + taskInformationModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
     @SuppressLint("Range")

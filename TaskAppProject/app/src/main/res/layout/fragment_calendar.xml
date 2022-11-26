@@ -20,6 +20,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ListView
+        android:id="@+id/TaskView"
+        android:layout_width="409dp"
+        android:layout_height="242dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_calendar" />
+
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="405dp"
@@ -28,9 +37,4 @@
         tools:layout_editor_absoluteX="-2dp"
         tools:layout_editor_absoluteY="-21dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="409dp"
-        android:layout_height="219dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="344dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

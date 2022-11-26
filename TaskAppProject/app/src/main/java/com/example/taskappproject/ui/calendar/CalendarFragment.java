@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.example.taskappproject.DataBaseHelper;
 import com.example.taskappproject.R;
+import com.example.taskappproject.TaskInformationModel;
 import com.example.taskappproject.databinding.FragmentCalendarBinding;
+
+import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
 
@@ -34,7 +41,33 @@ public class CalendarFragment extends Fragment {
     }
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        CalendarView calendarview = view.findViewById(R.id.calendarView);
+        ListView todaysList = view.findViewById(R.id.TaskView);
+        CalendarView calenderView = view.findViewById(R.id.calendarView);
+
+        // Displays tasks due on current day when opening calendar tab
+        ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
+        ArrayList<String> taskNames = new ArrayList<String>();
+        for (int i = 0; i < tasksDueToday.size(); i ++){
+            taskNames.add(tasksDueToday.get(i).getTaskName());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
+        todaysList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        // Displays tasks due on selected date on calendar
+        calenderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueOn(dayOfMonth, month + 1, year);
+                ArrayList<String> taskNames = new ArrayList<String>();
+                for (int i = 0; i < tasksDueToday.size(); i ++){
+                    taskNames.add(tasksDueToday.get(i).getTaskName());
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
+                todaysList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -42,6 +75,7 @@ public class CalendarFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 
 
 }
