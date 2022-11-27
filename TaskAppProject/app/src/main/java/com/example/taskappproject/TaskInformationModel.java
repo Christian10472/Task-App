@@ -5,11 +5,12 @@ public class TaskInformationModel {
     private int id;
     private String taskName, taskType, taskPriority;
     private int month, day, year, hour, minute;
+    private boolean complete;
 
     //constructors
 
 
-    public TaskInformationModel(int id, String taskName, String taskType, String taskPriority, int month, int day, int year, int hour, int minute) {
+    public TaskInformationModel(int id, String taskName, String taskType, String taskPriority, int month, int day, int year, int hour, int minute, boolean complete) {
         this.id = id;
         this.taskName = taskName;
         this.taskType = taskType;
@@ -19,14 +20,13 @@ public class TaskInformationModel {
         this.year = year;
         this.hour = hour;
         this.minute = minute;
+        this.complete = complete;
     }
 
     public TaskInformationModel() {
     }
 
     //toString
-
-
     @Override
     public String toString() {
         return "TaskInformationModel{" +
@@ -39,6 +39,7 @@ public class TaskInformationModel {
                 ", year=" + year +
                 ", hour=" + hour +
                 ", minute=" + minute +
+                ", complete=" + complete +
                 '}';
     }
 
@@ -113,5 +114,13 @@ public class TaskInformationModel {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    public boolean getComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

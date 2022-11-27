@@ -24,6 +24,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TASK_HOUR = "TASK_HOUR";
     public static final String COLUMN_TASK_MINUTE = "TASK_MINUTE";
     public static final String COLUMN_ID = "ID";
+    public static final String COLUMN_TASK_COMPLETE = "TASK_COMPLETE";
 
     public static DataBaseHelper instance;
 
@@ -34,7 +35,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //Used when Creating the database for the first time
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + TASK_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TASK_NAME + " TEXT, " + COLUMN_TASK_TYPE + " TEXT, " + COLUMN_TASK_PRIORITY + " TEXT, " + COLUMN_TASK_MONTH + " INT, " + COLUMN_TASK_DAY + " INT, " + COLUMN_TASK_YEAR + " INT, " + COLUMN_TASK_HOUR + " INT, " + COLUMN_TASK_MINUTE + " INT)";
+        String createTableStatement = "CREATE TABLE " + TASK_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TASK_NAME + " TEXT, " + COLUMN_TASK_TYPE + " TEXT, " + COLUMN_TASK_PRIORITY + " TEXT, " + COLUMN_TASK_MONTH + " INT, " + COLUMN_TASK_DAY + " INT, " + COLUMN_TASK_YEAR + " INT, " + COLUMN_TASK_HOUR + " INT, " + COLUMN_TASK_MINUTE + " INT, " + COLUMN_TASK_COMPLETE + " BOOL)";
 
         db.execSQL(createTableStatement);
     }
@@ -57,6 +58,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TASK_YEAR, taskInformationModel.getYear());
         cv.put(COLUMN_TASK_HOUR, taskInformationModel.getHour());
         cv.put(COLUMN_TASK_MINUTE, taskInformationModel.getMinute());
+        cv.put(COLUMN_TASK_COMPLETE, taskInformationModel.getComplete());
 
         long insert = db.insert(TASK_TABLE, null, cv);
         if (insert == 1){

@@ -26,12 +26,14 @@ public class TaskCreationActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton, reminderButton;
     int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
-    String taskType, priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_creation);
+
+        //Reminder Button
+        reminderButton = findViewById(R.id.reminderButton);
 
         //Text reference
         et_name = findViewById(R.id.et_name);
@@ -50,14 +52,14 @@ public class TaskCreationActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        taskType = spinner.getSelectedItem().toString();
+
 
         //Task priority spinner Reference
         Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(priorityAdapter);
-        priority = prioritySpinner.getSelectedItem().toString();
+
 
         //Create Button reference
         createButton = findViewById(R.id.createButton);
@@ -72,24 +74,19 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                 //TaskInformation not passing taskType and Priority
                 try {
-                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "Family", "High", taskMonth, taskDay, taskYear, hour, minute );
-                    Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_SHORT).show();
+                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString(), taskMonth, taskDay, taskYear, hour, minute, false);
+                    Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_LONG).show();
                     success = DataBaseHelper.instance.addOne(taskInformationModel);
+                    openMainActivity();
                 }catch (Exception e) {
                     Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0);
+                    taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0, false);
 
                 }
-
-
-                Toast.makeText(TaskCreationActivity.this, "Success" + success, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(TaskCreationActivity.this, "Success: " + success, Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        //Reminder Button
-        reminderButton = (Button) findViewById(R.id.reminderButton);
         reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +152,12 @@ public class TaskCreationActivity extends AppCompatActivity {
     //Method for Reminder Button
     public void openReminderSetting(){
         Intent intent = new Intent(this, ReminderSetting.class);
+        startActivity(intent);
+    }
+
+    //Method for Create Button
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
