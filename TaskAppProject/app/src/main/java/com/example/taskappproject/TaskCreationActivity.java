@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -25,6 +28,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     EditText et_name;
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton, reminderButton;
+    Switch reminderSwitch;
     int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
 
     @Override
@@ -32,37 +36,39 @@ public class TaskCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_creation);
 
-        //Reminder Button
-        reminderButton = findViewById(R.id.reminderButton);
-
-        //Text reference
+        //References
         et_name = findViewById(R.id.et_name);
+        reminderButton = findViewById(R.id.reminderButton);
+        timeButton = findViewById(R.id.timeButton);
+        Spinner spinner = findViewById(R.id.typeSpinner);
+        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
+        createButton = findViewById(R.id.createButton);
+        reminderSwitch = findViewById(R.id.reminderSwitch);
 
-        //Date Button reference
         dateButton = findViewById(R.id.datePickerButton);
         dateButton.setText(getTodayDate());
         initDatePicker();
 
-
-        //Time Button reference
-        timeButton = findViewById(R.id.timeButton);
-
-        //Task type spinner Reference
-        Spinner spinner = findViewById(R.id.typeSpinner);
+        //Make Type & Priority Spinner work
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-
-        //Task priority spinner Reference
-        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(priorityAdapter);
 
-
-        //Create Button reference
-        createButton = findViewById(R.id.createButton);
+        //Make Reminder Active
+        reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked){
+                    reminderButton.setEnabled(true);
+                }else{
+                    reminderButton.setEnabled(false);
+                }
+            }
+        });
 
         //Create Task Information
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -71,8 +77,6 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                 TaskInformationModel taskInformationModel;
                 boolean success = false;
-
-                //TaskInformation not passing taskType and Priority
                 try {
                     taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString(), taskMonth, taskDay, taskYear, hour, minute, false);
                     Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_LONG).show();
@@ -81,7 +85,6 @@ public class TaskCreationActivity extends AppCompatActivity {
                 }catch (Exception e) {
                     Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0, false);
-
                 }
                 Toast.makeText(TaskCreationActivity.this, "Success: " + success, Toast.LENGTH_SHORT).show();
             }
