@@ -66,10 +66,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else {
             return true;
         }
-    };
+    }
 
-    //deleting method
-    public boolean deleteOne(TaskInformationModel taskInformationModel){
+    public boolean deleteTask(TaskInformationModel taskInformationModel){
         SQLiteDatabase db = this.getWritableDatabase();
         String queryString = "DELETE FROM " + TASK_TABLE + " WHERE " + COLUMN_ID + " = " + taskInformationModel.getId();
 
@@ -80,6 +79,39 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else{
             return false;
         }
+    }
+
+    public int updateTask(TaskInformationModel taskInformationModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_TASK_NAME, taskInformationModel.getTaskName());
+        cv.put(COLUMN_TASK_TYPE, taskInformationModel.getTaskType());
+        cv.put(COLUMN_TASK_PRIORITY, taskInformationModel.getTaskPriority());
+        cv.put(COLUMN_TASK_MONTH, taskInformationModel.getMonth());
+        cv.put(COLUMN_TASK_DAY, taskInformationModel.getDay());
+        cv.put(COLUMN_TASK_YEAR, taskInformationModel.getYear());
+        cv.put(COLUMN_TASK_HOUR, taskInformationModel.getHour());
+        cv.put(COLUMN_TASK_MINUTE, taskInformationModel.getMinute());
+        cv.put(COLUMN_TASK_COMPLETE, taskInformationModel.getComplete());
+
+        return db.update(TASK_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(taskInformationModel.getId())});
+    }
+
+    public TaskInformationModel getTask(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + TASK_TABLE + " WHERE " + COLUMN_ID + " = " + id;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        TaskInformationModel taskInformationModel = new TaskInformationModel(Integer.parseInt(cursor.getString(0))
+                ,cursor.getString(1), cursor.getString(1), cursor.getString(1), cursor.getInt(1),cursor.getInt(1)
+                , cursor.getInt(1), cursor.getInt(1), cursor.getInt(1), false);
+
+        return taskInformationModel;
     }
 
 

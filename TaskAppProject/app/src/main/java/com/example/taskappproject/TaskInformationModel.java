@@ -7,9 +7,6 @@ public class TaskInformationModel {
     private int month, day, year, hour, minute;
     private boolean complete;
 
-    //constructors
-
-
     public TaskInformationModel(int id, String taskName, String taskType, String taskPriority, int month, int day, int year, int hour, int minute, boolean complete) {
         this.id = id;
         this.taskName = taskName;

@@ -17,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -25,11 +24,16 @@ import java.util.Locale;
 public class TaskCreationActivity extends AppCompatActivity {
 
     //variables
+    DataBaseHelper db;
+    TaskInformationModel taskInformationModel;
     EditText et_name;
     DatePickerDialog datePickerDialog;
-    Button dateButton, timeButton, createButton, reminderButton;
+    Button dateButton, timeButton, createButton, reminderButton, cancelButton;
     Switch reminderSwitch;
+    String taskName = "New Task";
     int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
+    boolean isEditMode = false;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,21 @@ public class TaskCreationActivity extends AppCompatActivity {
         Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
         createButton = findViewById(R.id.createButton);
         reminderSwitch = findViewById(R.id.reminderSwitch);
-
+        cancelButton = findViewById(R.id.cancelButton);
         dateButton = findViewById(R.id.datePickerButton);
+
+/* For Edit when implemented in Home Menu
+        intent = getIntent();
+        if (intent != null && intent.getStringExtra("Mode").equals("Edit")){
+            isEditMode = true;
+            taskInformationModel = db.getTask(intent.getIntExtra("id", 0));
+            et_name.setText(taskInformationModel.getTaskName());
+        }else{
+            isEditMode = false;
+            dateButton.setText(getTodayDate());
+        }
+
+ */ //Delete later when implementing edit above
         dateButton.setText(getTodayDate());
         initDatePicker();
 
@@ -62,31 +79,7 @@ public class TaskCreationActivity extends AppCompatActivity {
         reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked){
-                    reminderButton.setEnabled(true);
-                }else{
-                    reminderButton.setEnabled(false);
-                }
-            }
-        });
-
-        //Create Task Information
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                TaskInformationModel taskInformationModel;
-                boolean success = false;
-                try {
-                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString(), taskMonth, taskDay, taskYear, hour, minute, false);
-                    Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_LONG).show();
-                    success = DataBaseHelper.instance.addOne(taskInformationModel);
-                    openMainActivity();
-                }catch (Exception e) {
-                    Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0, false);
-                }
-                Toast.makeText(TaskCreationActivity.this, "Success: " + success, Toast.LENGTH_SHORT).show();
+                reminderButton.setEnabled(isChecked);
             }
         });
 
@@ -94,6 +87,44 @@ public class TaskCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openReminderSetting();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMainActivity();
+            }
+        });
+
+        //Create Task Information
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean success = false;
+                if (isEditMode){
+                    try {
+                        taskInformationModel = new TaskInformationModel(intent.getIntExtra("id", 0), taskName
+                                , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
+                                , taskMonth, taskDay, taskYear, hour, minute, false);;
+                                db.updateTask(taskInformationModel);
+                    }catch (Exception e) {
+                        Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    try {
+                        taskInformationModel = new TaskInformationModel(-1, taskName
+                                , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
+                                , taskMonth, taskDay, taskYear, hour, minute, false);
+                        Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_LONG).show();
+                        success = DataBaseHelper.instance.addOne(taskInformationModel);
+                        openMainActivity();
+                    }catch (Exception e) {
+                        Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                    Toast.makeText(TaskCreationActivity.this, "Success: " + success, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
