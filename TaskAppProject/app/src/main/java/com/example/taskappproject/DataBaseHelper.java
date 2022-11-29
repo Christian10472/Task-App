@@ -131,6 +131,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             task.setYear(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR)));
             task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
             task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
             result.add(task);
         }
         cursor.close();
@@ -166,6 +168,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             task.setYear(selectedYear);
             task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
             task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
             result.add(task);
         }
         cursor.close();
@@ -198,9 +202,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-
-    // MICHAEL WILL FINISH THESE LATER
-    public ArrayList<TaskInformationModel> getTasksDueThisWeek(){
-        return null;
+    // Returns list of tasks due within the next 7 days
+    @SuppressLint("Range")
+    public ArrayList<TaskInformationModel> getTasksDueSoon() {
+        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
+        Calendar c = Calendar.getInstance();
+        for (int i = 0; i < 7; i ++){
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            int month = c.get(Calendar.MONTH) + 1;
+            int year = c.get(Calendar.YEAR);
+            result.addAll(getTasksDueOn(day, month, year));
+            c.add(Calendar.DATE, 1);
+        }
+        return result;
     }
 }

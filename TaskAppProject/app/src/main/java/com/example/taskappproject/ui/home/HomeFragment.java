@@ -48,17 +48,28 @@ public class HomeFragment extends Fragment {
         // Populate list of items due today
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
         ListView todaysList = view.findViewById(R.id.todayItemsList);
-
         ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
+            if (tasksDueToday.get(i).getComplete()) continue;
             taskNames.add(tasksDueToday.get(i).getTaskName());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
         todaysList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        // Populate list of items due soon
+        ArrayList<TaskInformationModel> tasksDueSoon = DataBaseHelper.instance.getTasksDueToday();
+        ListView soonList = view.findViewById(R.id.upcomingItemsList);
+        taskNames.clear();
+        for (int i = 0; i < tasksDueSoon.size(); i ++){
+            if (tasksDueSoon.get(i).getComplete()) continue;
+            taskNames.add(tasksDueSoon.get(i).getTaskName());
+        }
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
+        todaysList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
-
-
+    
     @Override
     public void onDestroyView() {
         super.onDestroyView();
