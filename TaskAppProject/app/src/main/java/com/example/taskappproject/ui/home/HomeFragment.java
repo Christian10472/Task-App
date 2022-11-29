@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         // Populate list of items due soon
-        ArrayList<TaskInformationModel> tasksDueSoon = DataBaseHelper.instance.getTasksDueToday();
+        ArrayList<TaskInformationModel> tasksDueSoon = DataBaseHelper.instance.getTasksDueSoon();
         ListView soonList = view.findViewById(R.id.upcomingItemsList);
         taskNames.clear();
         for (int i = 0; i < tasksDueSoon.size(); i ++){
