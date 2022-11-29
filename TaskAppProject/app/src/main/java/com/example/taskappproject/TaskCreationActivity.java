@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -22,73 +24,65 @@ import java.util.Locale;
 public class TaskCreationActivity extends AppCompatActivity {
 
     //variables
+    DataBaseHelper db;
+    TaskInformationModel taskInformationModel;
     EditText et_name;
     DatePickerDialog datePickerDialog;
-    Button dateButton, timeButton, createButton, reminderButton;
-    int hour, minute, year, month, day;
-    String taskType, priority;
+    Button dateButton, timeButton, createButton, reminderButton, cancelButton;
+    Switch reminderSwitch;
+    String taskName;
+    int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
+    boolean isEditMode = false;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_creation);
 
-        //Text reference
+        //References
         et_name = findViewById(R.id.et_name);
-
-        //Date Button reference
-        initDatePicker();
-        dateButton = findViewById(R.id.datePickerButton);
-        dateButton.setText(getTodayDate());
-
-        //Time Button reference
+        reminderButton = findViewById(R.id.reminderButton);
         timeButton = findViewById(R.id.timeButton);
-
-        //Task type spinner Reference
         Spinner spinner = findViewById(R.id.typeSpinner);
+        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
+        createButton = findViewById(R.id.createButton);
+        reminderSwitch = findViewById(R.id.reminderSwitch);
+        cancelButton = findViewById(R.id.cancelButton);
+        dateButton = findViewById(R.id.datePickerButton);
+
+/* For Edit when implemented in Home Menu
+        intent = getIntent();
+        if (intent != null && intent.getStringExtra("Mode").equals("Edit")){
+            isEditMode = true;
+            taskInformationModel = db.getTask(intent.getIntExtra("id", 0));
+            et_name.setText(taskInformationModel.getTaskName());
+        }else{
+            isEditMode = false;
+            dateButton.setText(getTodayDate());
+        }
+
+ */ //Delete later when implementing edit above
+        dateButton.setText(getTodayDate());
+        initDatePicker();
+
+        //Make Type & Priority Spinner work
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        taskType = spinner.getSelectedItem().toString();
 
-        //Task priority spinner Reference
-        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(priorityAdapter);
-        priority = prioritySpinner.getSelectedItem().toString();
 
-        //Create Button reference
-        createButton = findViewById(R.id.createButton);
-
-        //Create Task Information
-        createButton.setOnClickListener(new View.OnClickListener() {
+        //Make Reminder Active
+        reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-
-                TaskInformationModel taskInformationModel;
-                boolean success = false;
-
-                //TaskInformation not passing taskType and Priority
-                try {
-                    taskInformationModel = new TaskInformationModel(-1, et_name.getText().toString(), "Family", "High", month, day, year, hour, minute );
-                    Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_SHORT).show();
-                    success = DataBaseHelper.instance.addOne(taskInformationModel);
-                }catch (Exception e) {
-                    Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    taskInformationModel = new TaskInformationModel(-1,"error", "error", "error", 0, 0, 0, 0 ,0);
-
-                }
-
-
-                Toast.makeText(TaskCreationActivity.this, "Success" + success, Toast.LENGTH_SHORT).show();
-
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                reminderButton.setEnabled(isChecked);
             }
         });
 
-
-        //Reminder Button
-        reminderButton = (Button) findViewById(R.id.reminderButton);
         reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,15 +90,57 @@ public class TaskCreationActivity extends AppCompatActivity {
             }
         });
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMainActivity();
+            }
+        });
+
+        //Create Task Information
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean success = false;
+                taskName = et_name.getText().toString();
+                if (taskName.matches("")){
+                    taskName = "New Task";
+                }
+                if (isEditMode){
+                    try {
+                        taskInformationModel = new TaskInformationModel(intent.getIntExtra("id", 0), taskName
+                                , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
+                                , taskMonth, taskDay, taskYear, hour, minute, false);;
+                                db.updateTask(taskInformationModel);
+                    }catch (Exception e) {
+                        Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    try {
+                        taskInformationModel = new TaskInformationModel(-1, taskName
+                                , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
+                                , taskMonth, taskDay, taskYear, hour, minute, false);
+                        Toast.makeText(TaskCreationActivity.this, taskInformationModel.toString(), Toast.LENGTH_LONG).show();
+                        success = DataBaseHelper.instance.addOne(taskInformationModel);
+                        openMainActivity();
+                    }catch (Exception e) {
+                        Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                    Toast.makeText(TaskCreationActivity.this, "Success: " + success, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
-    //Methods for Date Button
+    //Methods for Date Buttons
     private String getTodayDate(){
         Calendar cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH) + 1;
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        taskYear = cal.get(Calendar.YEAR);
+        taskMonth = cal.get(Calendar.MONTH) + 1;
+        taskDay = cal.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(taskDay, taskMonth, taskYear);
     }
 
     private void initDatePicker(){
@@ -113,6 +149,9 @@ public class TaskCreationActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
+                taskYear = year;
+                taskMonth = month;
+                taskDay = day;
                 dateButton.setText(date);
             }
         };
@@ -151,6 +190,12 @@ public class TaskCreationActivity extends AppCompatActivity {
     //Method for Reminder Button
     public void openReminderSetting(){
         Intent intent = new Intent(this, ReminderSetting.class);
+        startActivity(intent);
+    }
+
+    //Method for Create Button
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
