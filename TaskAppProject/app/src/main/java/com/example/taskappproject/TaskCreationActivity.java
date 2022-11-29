@@ -30,7 +30,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     Button dateButton, timeButton, createButton, reminderButton, cancelButton;
     Switch reminderSwitch;
-    String taskName = "New Task";
+    String taskName;
     int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
     boolean isEditMode = false;
     Intent intent;
@@ -102,6 +102,10 @@ public class TaskCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean success = false;
+                taskName = et_name.getText().toString();
+                if (taskName.matches("")){
+                    taskName = "New Task";
+                }
                 if (isEditMode){
                     try {
                         taskInformationModel = new TaskInformationModel(intent.getIntExtra("id", 0), taskName
