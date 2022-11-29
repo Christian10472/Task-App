@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
             taskNames.add(tasksDueSoon.get(i).getTaskName());
         }
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
-        todaysList.setAdapter(adapter);
+        soonList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
     
