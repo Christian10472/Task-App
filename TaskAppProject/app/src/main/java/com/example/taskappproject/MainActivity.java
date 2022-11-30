@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 openTaskCreationActivity();
             }
         });
+
     }
 
     //Method for Task Creation Button
@@ -57,4 +58,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Method for Note Creation Button
+    public void openNoteCreationActivity(View view){
+        Intent intent = new Intent(this, NoteCreationActivity.class);
+        startActivity(intent);
+    }
 }

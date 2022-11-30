@@ -13,6 +13,13 @@
         android:theme="@style/Theme.TaskAppProject"
         tools:targetApi="31">
         <activity
+            android:name=".NoteCreationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ReminderSetting"
             android:exported="false"
             android:label="Reminder Settings">
