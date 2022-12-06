@@ -1,9 +1,11 @@
 package com.example.taskappproject.ui.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
@@ -17,7 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.taskappproject.DataBaseHelper;
+import com.example.taskappproject.MainActivity;
 import com.example.taskappproject.R;
+import com.example.taskappproject.TaskCreationActivity;
 import com.example.taskappproject.TaskInformationModel;
 import com.example.taskappproject.databinding.FragmentCalendarBinding;
 
@@ -50,6 +54,7 @@ public class CalendarFragment extends Fragment {
         for (int i = 0; i < tasksDueToday.size(); i ++){
             taskNames.add(tasksDueToday.get(i).getTaskName());
         }
+        
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
         todaysList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -68,7 +73,19 @@ public class CalendarFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), TaskCreationActivity.class);
+                intent.putExtra("isEditMode", true);
+                intent.putExtra("Id", todaysList.getId());
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     @Override
     public void onDestroyView() {
