@@ -20,6 +20,7 @@
         android:inputType="textPersonName"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
+        android:maxLength="25"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
