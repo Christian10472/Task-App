@@ -11,6 +11,7 @@ import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.example.taskappproject.DataBaseHelper;
 import com.example.taskappproject.MainActivity;
 import com.example.taskappproject.R;
+import com.example.taskappproject.SwipeDetector;
 import com.example.taskappproject.TaskCreationActivity;
 import com.example.taskappproject.TaskInformationModel;
 import com.example.taskappproject.databinding.FragmentCalendarBinding;
@@ -74,13 +76,33 @@ public class CalendarFragment extends Fragment {
             }
         });
 
+        // Open edit page + Swipe gestures
+        SwipeDetector swipeDetector = new SwipeDetector();
+        todaysList.setOnTouchListener(swipeDetector);
         todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), TaskCreationActivity.class);
-                intent.putExtra("isEditMode", true);
-                intent.putExtra("Id", todaysList.getId());
-                startActivity(intent);
+                if (swipeDetector.swipeDetected()) {
+                    // Swipe right to left (Delete)
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
+                        // ADD DELETE CODE/METHOD HERE
+                        Toast.makeText(getContext(), "Right to Left", Toast.LENGTH_SHORT).show();
+                    }
+                    // Swipe left to right (Mark as complete)
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        // ADD TASK COMPLETE CODE/METHOD HERE
+                        Toast.makeText(getContext(), "Left to Right", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                // Click (Edit task)
+                else {
+                    Intent intent = new Intent(getContext(), TaskCreationActivity.class);
+                    intent.putExtra("isEditMode", true);
+                    intent.putExtra("Id", todaysList.getId());
+                    startActivity(intent);
+                }
+
             }
         });
     }
