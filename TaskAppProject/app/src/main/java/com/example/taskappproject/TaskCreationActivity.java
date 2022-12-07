@@ -72,11 +72,11 @@ public class TaskCreationActivity extends AppCompatActivity {
             day = taskInformationModel.getDay();
             month = taskInformationModel.getMonth();
             year = taskInformationModel.getYear();
-            dateButton.setText(month + "/" + day + "/" + year);
         }else{
             isEditMode = false;
             dateButton.setText(getTodayDate());
         }
+        initDatePicker();
 
 
         //Make Type & Priority Spinner work
