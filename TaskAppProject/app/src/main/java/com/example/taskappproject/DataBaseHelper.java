@@ -81,6 +81,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updateComplete(TaskInformationModel taskInformationModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_TASK_COMPLETE, true);
+
+        return db.update(TASK_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(taskInformationModel.getId())});
+    }
+
     public int updateTask(TaskInformationModel taskInformationModel){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -107,9 +116,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        TaskInformationModel taskInformationModel = new TaskInformationModel(Integer.parseInt(cursor.getString(0))
-                ,cursor.getString(1), cursor.getString(1), cursor.getString(1), cursor.getInt(1),cursor.getInt(1)
-                , cursor.getInt(1), cursor.getInt(1), cursor.getInt(1), false);
+        TaskInformationModel taskInformationModel = new TaskInformationModel(cursor.getInt(0)
+                ,cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4),cursor.getInt(5)
+                , cursor.getInt(6), cursor.getInt(7), cursor.getInt(8), false);
 
         return taskInformationModel;
     }

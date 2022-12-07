@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class CalendarFragment extends Fragment {
 
     private FragmentCalendarBinding binding;
+    DataBaseHelper db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class CalendarFragment extends Fragment {
 
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        db = new DataBaseHelper(container.getContext());
 
         final TextView textView = binding.textCalendar;
         calendarViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -54,7 +56,8 @@ public class CalendarFragment extends Fragment {
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
         ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
-            taskNames.add(tasksDueToday.get(i).getTaskName());
+            if (!tasksDueToday.get(i).getComplete())
+                taskNames.add(tasksDueToday.get(i).getTaskName());
         }
         
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
@@ -68,7 +71,8 @@ public class CalendarFragment extends Fragment {
                 ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueOn(dayOfMonth, month + 1, year);
                 ArrayList<String> taskNames = new ArrayList<String>();
                 for (int i = 0; i < tasksDueToday.size(); i ++){
-                    taskNames.add(tasksDueToday.get(i).getTaskName());
+                    if (!tasksDueToday.get(i).getComplete())
+                        taskNames.add(tasksDueToday.get(i).getTaskName());
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
                 todaysList.setAdapter(adapter);
@@ -82,24 +86,32 @@ public class CalendarFragment extends Fragment {
         todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel taskInformationModel= tasksDueToday.get(position);
                 if (swipeDetector.swipeDetected()) {
                     // Swipe right to left (Delete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
                         // ADD DELETE CODE/METHOD HERE
+                        int i = taskInformationModel.getId();
+                        taskInformationModel = db.getTask(i);
+                        db.deleteTask(taskInformationModel);
                         Toast.makeText(getContext(), "Right to Left", Toast.LENGTH_SHORT).show();
                     }
                     // Swipe left to right (Mark as complete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
                         // ADD TASK COMPLETE CODE/METHOD HERE
+                        int i = taskInformationModel.getId();
+                        taskInformationModel = db.getTask(i);
+                        db.updateComplete(taskInformationModel);
                         Toast.makeText(getContext(), "Left to Right", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 // Click (Edit task)
                 else {
-                    Intent intent = new Intent(getContext(), TaskCreationActivity.class);
-                    intent.putExtra("isEditMode", true);
-                    intent.putExtra("Id", todaysList.getId());
+                    int i = taskInformationModel.getId();
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", i);
                     startActivity(intent);
                 }
 
