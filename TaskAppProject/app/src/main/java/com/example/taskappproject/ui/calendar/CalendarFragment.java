@@ -82,6 +82,7 @@ public class CalendarFragment extends Fragment {
         todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel taskInformationModel= tasksDueToday.get(position);
                 if (swipeDetector.swipeDetected()) {
                     // Swipe right to left (Delete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
@@ -97,9 +98,10 @@ public class CalendarFragment extends Fragment {
 
                 // Click (Edit task)
                 else {
-                    Intent intent = new Intent(getContext(), TaskCreationActivity.class);
-                    intent.putExtra("isEditMode", true);
-                    intent.putExtra("Id", todaysList.getId());
+                    int i = taskInformationModel.getId();
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", i);
                     startActivity(intent);
                 }
 

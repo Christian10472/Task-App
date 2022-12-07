@@ -81,6 +81,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updateComplete(TaskInformationModel taskInformationModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_TASK_COMPLETE, true);
+
+        return db.update(TASK_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(taskInformationModel.getId())});
+    }
+
     public int updateTask(TaskInformationModel taskInformationModel){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

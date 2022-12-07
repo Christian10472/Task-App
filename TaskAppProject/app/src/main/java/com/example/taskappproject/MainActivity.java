@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     //Method for Task Creation Button
     public void openTaskCreationActivity(){
         Intent intent = new Intent(this, TaskCreationActivity.class);
+        intent.putExtra("Mode", "noEdit");
         startActivity(intent);
     }
 

@@ -41,8 +41,8 @@ public class TaskCreationActivity extends AppCompatActivity {
     Switch reminderSwitch;
     String taskName;
     int hour, minute, year, month, day, taskYear,taskMonth, taskDay;
-    boolean isEditMode = false;
     Intent intent;
+    boolean isEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +60,24 @@ public class TaskCreationActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         dateButton = findViewById(R.id.datePickerButton);
 
-/* For Edit when implemented in Home Menu
+        db = new DataBaseHelper(this);
+
+//For Edit when implemented in Home Menu
         intent = getIntent();
-        if (intent != null && intent.getStringExtra("Mode").equals("Edit")){
+        String s = intent.getStringExtra("Mode");
+        if (s.equals("Edit")){
             isEditMode = true;
-            taskInformationModel = db.getTask(intent.getIntExtra("id", 0));
+            taskInformationModel = db.getTask(intent.getIntExtra("Id", -1));
             et_name.setText(taskInformationModel.getTaskName());
+            day = taskInformationModel.getDay();
+            month = taskInformationModel.getMonth();
+            year = taskInformationModel.getYear();
+            dateButton.setText(month + "/" + day + "/" + year);
         }else{
             isEditMode = false;
             dateButton.setText(getTodayDate());
         }
 
- */ //Delete later when implementing edit above
-        dateButton.setText(getTodayDate());
-        initDatePicker();
 
         //Make Type & Priority Spinner work
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
@@ -100,7 +104,7 @@ public class TaskCreationActivity extends AppCompatActivity {
             }
             if (isEditMode){
                 try {
-                    taskInformationModel = new TaskInformationModel(intent.getIntExtra("id", 0), taskName
+                    taskInformationModel = new TaskInformationModel(intent.getIntExtra("Id", -1), taskName
                             , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
                             , taskMonth, taskDay, taskYear, hour, minute, false);;
                             db.updateTask(taskInformationModel);
