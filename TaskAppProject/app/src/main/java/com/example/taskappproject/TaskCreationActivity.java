@@ -72,6 +72,10 @@ public class TaskCreationActivity extends AppCompatActivity {
             day = taskInformationModel.getDay();
             month = taskInformationModel.getMonth();
             year = taskInformationModel.getYear();
+            hour = taskInformationModel.getHour();
+            minute = taskInformationModel.getMinute();
+            dateButton.setText(makeDateString(day, month, year));
+            timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
         }else{
             isEditMode = false;
             dateButton.setText(getTodayDate());
