@@ -19,8 +19,8 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.taskappproject.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:name="com.example.taskappproject.NotificationsFragment"
+        android:label="To-Do List"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment

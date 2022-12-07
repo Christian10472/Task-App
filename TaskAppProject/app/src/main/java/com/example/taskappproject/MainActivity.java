@@ -8,17 +8,20 @@ import android.widget.Button;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.taskappproject.databinding.ActivityMainBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
     //code for TaskCreation button
     private Button button;
+    private FloatingActionButton fab;
 
     private ActivityMainBinding binding;
 
@@ -42,19 +45,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         //code to go to Task Creation button -Christian
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openTaskCreationActivity();
             }
         });
+
     }
 
     //Method for Task Creation Button
     public void openTaskCreationActivity(){
         Intent intent = new Intent(this, TaskCreationActivity.class);
+        intent.putExtra("Mode", "noEdit");
         startActivity(intent);
     }
 
+    //Method for Note Creation Button
+    public void openNoteCreationActivity(View view){
+        Intent intent = new Intent(this, NoteCreationActivity.class);
+        startActivity(intent);
+    }
 }
