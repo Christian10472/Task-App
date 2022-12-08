@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/linear_layout"
@@ -7,28 +7,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".NotificationsFragment">
 
-    <TextView
-        android:id="@+id/tasksText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="To-Do List"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:textSize="32sp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasksRecyclerView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tasksText"
-        tools:listitem="@layout/task_layout"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:nestedScrollingEnabled="true"/>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tasksText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="To-Do List"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/todayText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tasksText"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="-2dp"
+                android:text="To-Do List"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-</RelativeLayout>
+            <ListView
+                android:id="@+id/tasksRecyclerView"
+                android:layout_width="394dp"
+                android:layout_height="207dp"
+                android:layout_below="@id/tasksText"
+                android:layout_marginTop="40dp"
+                android:nestedScrollingEnabled="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/task_layout" />
+
+            <TextView
+                android:id="@+id/tomorrowText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tasksRecyclerView"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/tomorrowRecycleView"
+                android:layout_width="394dp"
+                android:layout_height="207dp"
+                android:layout_below="@+id/tomorrowText"
+                android:layout_marginTop="14dp"
+                android:baselineAligned="false"
+                android:nestedScrollingEnabled="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/task_layout" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

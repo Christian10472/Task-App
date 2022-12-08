@@ -19,8 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsViewModel extends AppCompatActivity {
+/*
     private RecyclerView tasksRecyclerView;
     private FloatingActionButton fab;
+
+
 
 
     @Override
@@ -34,5 +37,7 @@ public class NotificationsViewModel extends AppCompatActivity {
 
     }
 
+
+ */
 
 }
