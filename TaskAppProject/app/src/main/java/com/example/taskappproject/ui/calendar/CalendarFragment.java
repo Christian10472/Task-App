@@ -75,7 +75,7 @@ public class CalendarFragment extends Fragment {
         calenderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
+                tasksDueToday = DataBaseHelper.instance.getTasksDueOn(dayOfMonth, month + 1, year);
                 incompleteTasks = new ArrayList<>();
                 taskNames = new ArrayList<String>();
                 for (int i = 0; i < tasksDueToday.size(); i ++){
@@ -84,6 +84,8 @@ public class CalendarFragment extends Fragment {
                         taskNames.add(tasksDueToday.get(i).getTaskName());
                     }
                 }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
+                todaysList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         });
