@@ -41,17 +41,22 @@ public class HomeFragment extends Fragment {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
         String str = DayOfWeek.of(dayOfWeek).name() + ",\n" + Month.of(month + 1).name() + " " + dayOfMonth;
         TextView todaysDate = view.findViewById(R.id.todaysDateText);
         todaysDate.setText(str);
 
         // Populate list of items due today
+        int completedToday = 0;
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
         ArrayList<String> tasksDueTodayNames = new ArrayList<String>();
         ArrayList<String> tasksDueSoonNames = new ArrayList<String>();
         ListView todaysList = view.findViewById(R.id.todayItemsList);
         for (int i = 0; i < tasksDueToday.size(); i ++){
-            if (tasksDueToday.get(i).getComplete()) continue;
+            if (tasksDueToday.get(i).getComplete()) {
+                completedToday++;
+                continue;
+            }
             tasksDueTodayNames.add(tasksDueToday.get(i).getTaskName());
         }
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueTodayNames);
@@ -68,6 +73,19 @@ public class HomeFragment extends Fragment {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueSoonNames);
         soonList.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
+
+        // Set Stats
+        TextView statsToday = view.findViewById(R.id.tasksCompletedTodayText);
+        TextView statsMonth = view.findViewById(R.id.tasksCompletedThisMonthText);
+        statsToday.setText(completedToday + "/" + tasksDueToday.size() + " Completed Today");
+
+        int completedThisMonth = 0;
+        ArrayList<TaskInformationModel> monthsTasks = DataBaseHelper.instance.getTasksDueInMonth(month + 1, year);
+        for (int i = 0; i < monthsTasks.size(); i ++){
+            if (monthsTasks.get(i).getComplete()) completedThisMonth++;
+        }
+        statsMonth.setText(completedThisMonth + "/" + monthsTasks.size() + " Completed This Month");
+
     }
     
     @Override
