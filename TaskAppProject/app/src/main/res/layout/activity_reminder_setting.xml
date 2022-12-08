@@ -10,70 +10,74 @@
         android:id="@+id/editTextTextPersonName4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="184dp"
+        android:layout_marginBottom="323dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:text="Repeat"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="234dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
-        android:layout_width="63dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="60dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Date: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName3"
-        android:layout_width="77dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Time: "
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="136dp" />
-
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="285dp"
+        android:layout_marginTop="241dp"
+        android:layout_marginEnd="77dp"
+        android:layout_marginBottom="323dp"
         android:text=""
-        tools:layout_editor_absoluteX="314dp"
-        tools:layout_editor_absoluteY="241dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="136dp"
         android:layout_height="82dp"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="479dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginBottom="42dp"
         android:text="Set Reminder"
-        tools:layout_editor_absoluteX="137dp"
-        tools:layout_editor_absoluteY="479dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/reminderDatePickerButton"
-        style="?android:spinnerStyle"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:onClick="openDatePicker"
-        android:text="JAN 01 2022"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="75dp"
-        tools:layout_editor_absoluteY="60dp" />
+    <TextView
+        android:id="@+id/date_time"
+        android:layout_width="181dp"
+        android:layout_height="49dp"
+        android:text="Select Date and Time"
+        android:textSize = "18sp"
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="295dp" />
 
-    <EditText
-        android:id="@+id/editTextTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="136dp" />
+    <TextView
+        android:id="@+id/timePicker"
+        android:layout_width="141dp"
+        android:layout_height="53dp"
+        android:text="Select Time"
+        android:textSize = "18sp"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="145dp" />
+
+    <TextView
+        android:id="@+id/datePicker"
+        android:layout_width="158dp"
+        android:layout_height="59dp"
+        android:text="Select Date"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="23dp"
+        tools:layout_editor_absoluteY="34dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
