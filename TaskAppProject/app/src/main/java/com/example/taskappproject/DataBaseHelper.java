@@ -107,6 +107,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return db.update(TASK_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(taskInformationModel.getId())});
     }
 
+    @SuppressLint("Range")
     public TaskInformationModel getTask(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "SELECT * FROM " + TASK_TABLE + " WHERE " + COLUMN_ID + " = " + id;
@@ -116,11 +117,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        TaskInformationModel taskInformationModel = new TaskInformationModel(cursor.getInt(0)
-                ,cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4),cursor.getInt(5)
-                , cursor.getInt(6), cursor.getInt(7), cursor.getInt(8), false);
-
-        return taskInformationModel;
+        TaskInformationModel task = new TaskInformationModel();
+        task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
+        task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
+        task.setTaskPriority(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_PRIORITY)));
+        task.setMonth(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MONTH)));
+        task.setDay(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_DAY)));
+        task.setYear(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR)));
+        task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
+        task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+        task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
+        task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+        return task;
     }
 
     /* Task retrieval methods */
@@ -180,7 +188,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
             task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
             task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
-
+            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             result.add(task);
         }
         cursor.close();
