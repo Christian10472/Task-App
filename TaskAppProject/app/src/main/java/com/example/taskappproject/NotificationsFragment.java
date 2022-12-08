@@ -104,7 +104,7 @@ public class NotificationsFragment extends Fragment {
         TextView todaysDate = view.findViewById(R.id.todayText);
         todaysDate.setText("Due Today: ");
         TextView tommorrowsDate = view.findViewById(R.id.tomorrowText);
-        tommorrowsDate.setText("Due Soon: ");
+        tommorrowsDate.setText("Due This Week: ");
         ListView tomorrowsList = view.findViewById(R.id.tomorrowRecycleView);
         ListView todaysList = view.findViewById(R.id.tasksRecyclerView);
         //CalendarView calenderView = view.findViewById(R.id.calendarView);
@@ -151,21 +151,28 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TaskInformationModel taskInformationModel= tasksduesoon.get(position);
+                TaskInformationModel taskInformationModel2= tasksduesoon.get(position);
                 if (swipeDetector.swipeDetected()) {
                     // Swipe right to left (Delete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
                         // ADD DELETE CODE/METHOD HERE
                         int i = taskInformationModel.getId();
+                        int z = taskInformationModel2.getId();
                         taskInformationModel = db.getTask(i);
+                        taskInformationModel = db.getTask(z);
                         db.deleteTask(taskInformationModel);
+                        db.deleteTask(taskInformationModel2);
                         Toast.makeText(getContext(), "Right to Left", Toast.LENGTH_SHORT).show();
                     }
                     // Swipe left to right (Mark as complete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
                         // ADD TASK COMPLETE CODE/METHOD HERE
                         int i = taskInformationModel.getId();
+                        int z = taskInformationModel2.getId();
                         taskInformationModel = db.getTask(i);
+                        taskInformationModel = db.getTask(z);
                         db.updateComplete(taskInformationModel);
+                        db.updateComplete(taskInformationModel2);
                         Toast.makeText(getContext(), "Left to Right", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -173,6 +180,7 @@ public class NotificationsFragment extends Fragment {
                 // Click (Edit task)
                 else {
                     int i = taskInformationModel.getId();
+                    int z = taskInformationModel.getId();
                     Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
                     intent.putExtra("Mode", "Edit");
                     intent.putExtra("Id", i);
