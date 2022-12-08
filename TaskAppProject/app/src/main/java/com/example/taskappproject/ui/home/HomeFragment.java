@@ -1,12 +1,15 @@
 package com.example.taskappproject.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.taskappproject.DataBaseHelper;
 import com.example.taskappproject.R;
+import com.example.taskappproject.SwipeDetector;
 import com.example.taskappproject.TaskCreationActivity;
 import com.example.taskappproject.TaskInformationModel;
 import com.example.taskappproject.databinding.FragmentHomeBinding;
@@ -85,6 +89,40 @@ public class HomeFragment extends Fragment {
             if (monthsTasks.get(i).getComplete()) completedThisMonth++;
         }
         statsMonth.setText(completedThisMonth + "/" + monthsTasks.size() + " Completed This Month");
+
+        SwipeDetector swipeDetector = new SwipeDetector();
+        todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel task = tasksDueToday.get(position);
+                if (swipeDetector.swipeDetected()) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) DataBaseHelper.instance.deleteTask(task);
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) DataBaseHelper.instance.updateComplete(task);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", task.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+        soonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel task = tasksDueSoon.get(position);
+                if (swipeDetector.swipeDetected()) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) DataBaseHelper.instance.deleteTask(task);
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) DataBaseHelper.instance.updateComplete(task);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", task.getId());
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
     
