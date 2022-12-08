@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskappproject.ui.notifications.Model.ToDoModel;
+
 import java.util.ArrayList;
 
 
@@ -41,6 +43,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
         return taskArrayList.size();
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView tabTask;
@@ -50,4 +53,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
             tabTask = itemView.findViewById(R.id.CheckBox);
         }
     }
+
+
 }

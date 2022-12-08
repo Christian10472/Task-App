@@ -1,5 +1,6 @@
 package com.example.taskappproject;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -57,11 +58,20 @@ public class NoteHelper extends SQLiteOpenHelper {
         return db.update(NOTE_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(note.getId())});
     }
 
+    @SuppressLint("Range")
     public ArrayList<Note> getAll(){
         ArrayList<Note> returnList = new ArrayList<>();
         String qString = "SELECT * FROM " + NOTE_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(qString, null);
+        for (int count = 0; count < cursor.getCount(); count++){
+            cursor.moveToPosition(count);
+            Note note = new Note();
+            note.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            note.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            note.setBody(cursor.getString(cursor.getColumnIndex(COLUMN_BODY)));
+            returnList.add(note);
+        }
         if(cursor.moveToFirst()){
             do{
                 int id = cursor.getInt(0);
@@ -77,5 +87,19 @@ public class NoteHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return returnList;
+    }
+
+    public boolean deleteOne(Note note){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String qString = "DELETE FROM " + NOTE_TABLE + " WHERE " + COLUMN_ID + " = " + note.getId();
+        Cursor cursor = db.rawQuery(qString, null);
+        if(cursor.moveToFirst()){
+            return true;
+        }return false;
+    }
+
+    public void deleteAll(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //db.delete()
     }
 }

@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,9 +46,22 @@ public class NotesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         ListView noteList = view.findViewById(R.id.lv_noteList);
         ArrayList<Note> notes = NoteHelper.instance.getAll();
-        ArrayAdapter<Note> noteAA = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, notes);
+        ArrayAdapter<Note> noteAA = new ArrayAdapter<Note>(getContext(), android.R.layout.simple_list_item_1, notes);
         noteList.setAdapter(noteAA);
         noteAA.notifyDataSetChanged();
+
+        noteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                Note note = notes.get(i);
+                boolean success = NoteHelper.instance.deleteOne(note);
+                ArrayAdapter<Note> noteAA2 = new ArrayAdapter<Note>(getContext(), android.R.layout.simple_list_item_1, NoteHelper.instance.getAll());
+                noteList.setAdapter(noteAA2);
+                Toast.makeText(getContext(), "Success="+ success, Toast.LENGTH_SHORT);
+            }
+        });
+
+
     }
 
     @Override
@@ -54,6 +69,5 @@ public class NotesFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 
 }

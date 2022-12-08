@@ -16,10 +16,7 @@ public class Note {
     //toString
     @Override
     public String toString() {
-        return "TaskInformationModel{" +
-                "id=" + id +
-                ", noteName='" + noteName + '\'' +
-                ", noteBody='" + noteBody + '}';
+        return noteName;
     }
 
     //Setters and Getters
