@@ -54,10 +54,13 @@ public class CalendarFragment extends Fragment {
 
         // Displays tasks due on current day when opening calendar tab
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
+        ArrayList<TaskInformationModel> incompleteTasks = new ArrayList<TaskInformationModel>();
         ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
-            if (!tasksDueToday.get(i).getComplete())
+            if (!tasksDueToday.get(i).getComplete()) {
+                incompleteTasks.add(tasksDueToday.get(i));
                 taskNames.add(tasksDueToday.get(i).getTaskName());
+            }
         }
         
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
@@ -86,7 +89,7 @@ public class CalendarFragment extends Fragment {
         todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TaskInformationModel taskInformationModel= tasksDueToday.get(position);
+                TaskInformationModel taskInformationModel= incompleteTasks.get(position);
                 if (swipeDetector.swipeDetected()) {
                     // Swipe right to left (Delete)
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
