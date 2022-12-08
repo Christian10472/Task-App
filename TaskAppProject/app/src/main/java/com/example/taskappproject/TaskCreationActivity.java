@@ -59,25 +59,9 @@ public class TaskCreationActivity extends AppCompatActivity {
         reminderSwitch = findViewById(R.id.reminderSwitch);
         cancelButton = findViewById(R.id.cancelButton);
         dateButton = findViewById(R.id.datePickerButton);
-
         db = new DataBaseHelper(this);
 
-//For Edit when implemented in Home Menu
-        intent = getIntent();
-        String s = intent.getStringExtra("Mode");
-        if (s.equals("Edit")){
-            isEditMode = true;
-            taskInformationModel = db.getTask(intent.getIntExtra("Id", -1));
-            et_name.setText(taskInformationModel.getTaskName());
-            day = taskInformationModel.getDay();
-            month = taskInformationModel.getMonth();
-            year = taskInformationModel.getYear();
-            dateButton.setText(month + "/" + day + "/" + year);
-        }else{
-            isEditMode = false;
-            dateButton.setText(getTodayDate());
-        }
-
+        initDatePicker();
 
         //Make Type & Priority Spinner work
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
@@ -87,6 +71,30 @@ public class TaskCreationActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(priorityAdapter);
+
+        //For Edit when implemented in Home Menu
+        intent = getIntent();
+        String s = intent.getStringExtra("Mode");
+        if (s.equals("Edit")){
+            isEditMode = true;
+            taskInformationModel = db.getTask(intent.getIntExtra("Id", -1));
+            et_name.setText(taskInformationModel.getTaskName());
+            day = taskInformationModel.getDay();
+            month = taskInformationModel.getMonth();
+            year = taskInformationModel.getYear();
+            hour = taskInformationModel.getHour();
+            minute = taskInformationModel.getMinute();
+            taskMonth= month;
+            taskDay = day;
+            taskYear = year;
+            dateButton.setText(makeDateString(day, month, year));
+            timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            spinner.setSelection(adapter.getPosition(taskInformationModel.getTaskType()));
+            prioritySpinner.setSelection(priorityAdapter.getPosition(taskInformationModel.getTaskPriority()));
+        }else{
+            isEditMode = false;
+            dateButton.setText(getTodayDate());
+        }
 
         //Make Reminder Active
         reminderSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> reminderButton.setEnabled(isChecked));
@@ -108,6 +116,7 @@ public class TaskCreationActivity extends AppCompatActivity {
                             , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
                             , taskMonth, taskDay, taskYear, hour, minute, false);;
                             db.updateTask(taskInformationModel);
+                    openMainActivity();
                 }catch (Exception e) {
                     Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
