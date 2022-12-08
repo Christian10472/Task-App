@@ -205,6 +205,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             task.setYear(selectedYear);
             task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
             task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
+            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
             result.add(task);
         }
         cursor.close();
