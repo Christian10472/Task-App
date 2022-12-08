@@ -23,6 +23,7 @@ import com.example.taskappproject.Note;
 import com.example.taskappproject.NoteCreationActivity;
 import com.example.taskappproject.NoteHelper;
 import com.example.taskappproject.R;
+import com.example.taskappproject.TaskCreationActivity;
 import com.example.taskappproject.databinding.FragmentNotesBinding;
 
 import java.util.ArrayList;
@@ -54,10 +55,13 @@ public class NotesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
                 Note note = notes.get(i);
-                boolean success = NoteHelper.instance.deleteOne(note);
+                Intent intent = new Intent(getActivity(), NoteCreationActivity.class);
+                intent.putExtra("Mode", "Edit");
+                intent.putExtra("Id", note.getId());
+                startActivity(intent);
+
                 ArrayAdapter<Note> noteAA2 = new ArrayAdapter<Note>(getContext(), android.R.layout.simple_list_item_1, NoteHelper.instance.getAll());
                 noteList.setAdapter(noteAA2);
-                Toast.makeText(getContext(), "Success="+ success, Toast.LENGTH_SHORT);
             }
         });
 

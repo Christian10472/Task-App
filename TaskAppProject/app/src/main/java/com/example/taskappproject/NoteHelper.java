@@ -1,11 +1,13 @@
 package com.example.taskappproject;
 
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -24,7 +26,7 @@ public class NoteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + NOTE_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ID + " INT, " + COLUMN_NAME + " TEXT, " + COLUMN_BODY + " TEXT)";
+        String createTableStatement = "CREATE TABLE " + NOTE_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,  " + COLUMN_NAME + " TEXT, " + COLUMN_BODY + " TEXT)";
 
         db.execSQL(createTableStatement);
     }
@@ -64,25 +66,13 @@ public class NoteHelper extends SQLiteOpenHelper {
         String qString = "SELECT * FROM " + NOTE_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(qString, null);
-        for (int count = 0; count < cursor.getCount(); count++){
+        for (int count = 0; count < cursor.getCount(); count++) {
             cursor.moveToPosition(count);
             Note note = new Note();
             note.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             note.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
             note.setBody(cursor.getString(cursor.getColumnIndex(COLUMN_BODY)));
             returnList.add(note);
-        }
-        if(cursor.moveToFirst()){
-            do{
-                int id = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String body = cursor.getString(2);
-
-                Note note = new Note(id, name, body);
-                returnList.add(note);
-            }while(cursor.moveToNext());
-        }else{
-
         }
         cursor.close();
         db.close();
@@ -94,8 +84,29 @@ public class NoteHelper extends SQLiteOpenHelper {
         String qString = "DELETE FROM " + NOTE_TABLE + " WHERE " + COLUMN_ID + " = " + note.getId();
         Cursor cursor = db.rawQuery(qString, null);
         if(cursor.moveToFirst()){
+            db.close();
+            cursor.close();
             return true;
-        }return false;
+        }cursor.close();
+        db.close();
+        return false;
+    }
+
+    @SuppressLint("Range")
+    public Note getNote(int i){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + NOTE_TABLE + " WHERE " + COLUMN_ID + " = " + i;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Note note = new Note();
+        note.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+        note.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+        note.setBody(cursor.getString(cursor.getColumnIndex(COLUMN_BODY)));
+        return note;
     }
 
     public void deleteAll(){

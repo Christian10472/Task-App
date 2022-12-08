@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 public class NoteCreationActivity extends AppCompatActivity {
 
     //variables
@@ -30,9 +32,21 @@ public class NoteCreationActivity extends AppCompatActivity {
         et_name = findViewById(R.id.noteName);
         et_body = findViewById(R.id.noteBody);
         doneButton = findViewById(R.id.noteDoneButton);
+        NoteHelper helper = new NoteHelper(NoteCreationActivity.this);
+        intent = getIntent();
+        String s = intent.getStringExtra("Mode");
+        int id = intent.getIntExtra("Id", -1);
+        if(s == null){} else if (s.equals("Edit")){
+            isEditMode = true;
+            Note note = helper.getNote(id);
+            et_name.setText(note.getName());
+            et_body.setText(note.getBody());
+        }else{
+            isEditMode = false;
+        }
 
         doneButton.setOnClickListener(view -> {
-            NoteHelper helper = new NoteHelper(NoteCreationActivity.this);
+
             boolean success = false;
             Note note;
             name = et_name.getText().toString();
@@ -42,8 +56,8 @@ public class NoteCreationActivity extends AppCompatActivity {
             body = et_body.getText().toString();
             if (isEditMode){
                 try {
-                    note = new Note(intent.getIntExtra("id", 0), name,body);
-                    helper.updateNote(note);
+                    note = new Note(id, name,body);
+                    int outcome = helper.updateNote(note);
                 }catch (Exception e) {
                     Toast.makeText(NoteCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
