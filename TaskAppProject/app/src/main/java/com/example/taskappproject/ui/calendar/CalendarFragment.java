@@ -68,7 +68,7 @@ public class CalendarFragment extends Fragment {
         calenderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                ArrayList<TaskInformationModel> tasksDueOn = DataBaseHelper.instance.getTasksDueOn(dayOfMonth, month + 1, year);
+                ArrayList<TaskInformationModel> tasksDueOn = DataBaseHelper.instance.getTasksDueOn2(dayOfMonth, month + 1, year);
                 ArrayList<String> taskNames = new ArrayList<String>();
                 for (int i = 0; i < tasksDueOn.size(); i ++){
                     if (!tasksDueOn.get(i).getComplete())
