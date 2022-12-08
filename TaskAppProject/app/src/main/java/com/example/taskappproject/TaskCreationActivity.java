@@ -59,10 +59,20 @@ public class TaskCreationActivity extends AppCompatActivity {
         reminderSwitch = findViewById(R.id.reminderSwitch);
         cancelButton = findViewById(R.id.cancelButton);
         dateButton = findViewById(R.id.datePickerButton);
-
         db = new DataBaseHelper(this);
 
-//For Edit when implemented in Home Menu
+        initDatePicker();
+
+        //Make Type & Priority Spinner work
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(priorityAdapter);
+
+        //For Edit when implemented in Home Menu
         intent = getIntent();
         String s = intent.getStringExtra("Mode");
         if (s.equals("Edit")){
@@ -74,23 +84,17 @@ public class TaskCreationActivity extends AppCompatActivity {
             year = taskInformationModel.getYear();
             hour = taskInformationModel.getHour();
             minute = taskInformationModel.getMinute();
+            taskMonth= month;
+            taskDay = day;
+            taskYear = year;
             dateButton.setText(makeDateString(day, month, year));
             timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            spinner.setSelection(adapter.getPosition(taskInformationModel.getTaskType()));
+            prioritySpinner.setSelection(priorityAdapter.getPosition(taskInformationModel.getTaskPriority()));
         }else{
             isEditMode = false;
             dateButton.setText(getTodayDate());
         }
-        initDatePicker();
-
-
-        //Make Type & Priority Spinner work
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.taskType, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.taskPriority, android.R.layout.simple_spinner_item);
-        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        prioritySpinner.setAdapter(priorityAdapter);
 
         //Make Reminder Active
         reminderSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> reminderButton.setEnabled(isChecked));
@@ -112,6 +116,7 @@ public class TaskCreationActivity extends AppCompatActivity {
                             , spinner.getSelectedItem().toString(), prioritySpinner.getSelectedItem().toString()
                             , taskMonth, taskDay, taskYear, hour, minute, false);;
                             db.updateTask(taskInformationModel);
+                    openMainActivity();
                 }catch (Exception e) {
                     Toast.makeText(TaskCreationActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }

@@ -1,12 +1,15 @@
 package com.example.taskappproject.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.taskappproject.DataBaseHelper;
 import com.example.taskappproject.R;
+import com.example.taskappproject.SwipeDetector;
 import com.example.taskappproject.TaskCreationActivity;
 import com.example.taskappproject.TaskInformationModel;
 import com.example.taskappproject.databinding.FragmentHomeBinding;
@@ -41,33 +45,85 @@ public class HomeFragment extends Fragment {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
         String str = DayOfWeek.of(dayOfWeek).name() + ",\n" + Month.of(month + 1).name() + " " + dayOfMonth;
         TextView todaysDate = view.findViewById(R.id.todaysDateText);
         todaysDate.setText(str);
 
         // Populate list of items due today
+        int completedToday = 0;
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
+        ArrayList<String> tasksDueTodayNames = new ArrayList<String>();
+        ArrayList<String> tasksDueSoonNames = new ArrayList<String>();
         ListView todaysList = view.findViewById(R.id.todayItemsList);
-        ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
-            if (tasksDueToday.get(i).getComplete()) continue;
-            taskNames.add(tasksDueToday.get(i).getTaskName());
+            if (tasksDueToday.get(i).getComplete()) {
+                completedToday++;
+                continue;
+            }
+            tasksDueTodayNames.add(tasksDueToday.get(i).getTaskName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
-        todaysList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueTodayNames);
+        todaysList.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
 
         // Populate list of items due soon
         ArrayList<TaskInformationModel> tasksDueSoon = DataBaseHelper.instance.getTasksDueSoon();
         ListView soonList = view.findViewById(R.id.upcomingItemsList);
-        taskNames.clear();
         for (int i = 0; i < tasksDueSoon.size(); i ++){
             if (tasksDueSoon.get(i).getComplete()) continue;
-            taskNames.add(tasksDueSoon.get(i).getTaskName());
+            tasksDueSoonNames.add(tasksDueSoon.get(i).getTaskName());
         }
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
-        soonList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueSoonNames);
+        soonList.setAdapter(adapter2);
+        adapter2.notifyDataSetChanged();
+
+        // Set Stats
+        TextView statsToday = view.findViewById(R.id.tasksCompletedTodayText);
+        TextView statsMonth = view.findViewById(R.id.tasksCompletedThisMonthText);
+        statsToday.setText(completedToday + "/" + tasksDueToday.size() + " Completed Today");
+
+        int completedThisMonth = 0;
+        ArrayList<TaskInformationModel> monthsTasks = DataBaseHelper.instance.getTasksDueInMonth(month + 1, year);
+        for (int i = 0; i < monthsTasks.size(); i ++){
+            if (monthsTasks.get(i).getComplete()) completedThisMonth++;
+        }
+        statsMonth.setText(completedThisMonth + "/" + monthsTasks.size() + " Completed This Month");
+
+        SwipeDetector swipeDetector = new SwipeDetector();
+        todaysList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel task = tasksDueToday.get(position);
+                if (swipeDetector.swipeDetected()) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) DataBaseHelper.instance.deleteTask(task);
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) DataBaseHelper.instance.updateComplete(task);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", task.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+        soonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskInformationModel task = tasksDueSoon.get(position);
+                if (swipeDetector.swipeDetected()) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) DataBaseHelper.instance.deleteTask(task);
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) DataBaseHelper.instance.updateComplete(task);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), TaskCreationActivity.class);
+                    intent.putExtra("Mode", "Edit");
+                    intent.putExtra("Id", task.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
     
     @Override
