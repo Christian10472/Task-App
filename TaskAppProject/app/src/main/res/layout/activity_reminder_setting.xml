@@ -10,74 +10,77 @@
         android:id="@+id/editTextTextPersonName4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="232dp"
-        android:layout_marginEnd="184dp"
-        android:layout_marginBottom="323dp"
+        android:layout_marginTop="332dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="17dp"
+        android:autofillHints=""
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="Repeat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/date_time"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="HardcodedText,LabelFor" />
 
     <Switch
-        android:id="@+id/switch1"
-        android:layout_width="50dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="285dp"
-        android:layout_marginTop="241dp"
-        android:layout_marginEnd="77dp"
-        android:layout_marginBottom="323dp"
+        android:id="@+id/repeat_button"
+        android:layout_width="45dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginBottom="206dp"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName4"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/reminder_button"
         android:layout_width="136dp"
-        android:layout_height="82dp"
-        android:layout_marginStart="137dp"
-        android:layout_marginTop="479dp"
-        android:layout_marginEnd="138dp"
-        android:layout_marginBottom="42dp"
-        android:text="Set Reminder"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="9dp"
+        android:text="@string/set_reminder"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/date_time" />
 
     <TextView
         android:id="@+id/date_time"
-        android:layout_width="181dp"
-        android:layout_height="49dp"
+        android:layout_width="207dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="157dp"
         android:text="Select Date and Time"
-        android:textSize = "18sp"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="295dp" />
-
-    <TextView
-        android:id="@+id/timePicker"
-        android:layout_width="141dp"
-        android:layout_height="53dp"
-        android:text="Select Time"
-        android:textSize = "18sp"
-        tools:layout_editor_absoluteX="24dp"
-        tools:layout_editor_absoluteY="145dp" />
-
-    <TextView
-        android:id="@+id/datePicker"
-        android:layout_width="158dp"
-        android:layout_height="59dp"
-        android:text="Select Date"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="23dp"
-        tools:layout_editor_absoluteY="34dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintVertical_bias="0.995"
+        tools:ignore="HardcodedText" />
 
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginBottom="7dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/reminder_button"
+        app:layout_constraintTop_toBottomOf="@+id/reminder_button" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="243dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/repeat_button"
+        app:layout_constraintEnd_toEndOf="@+id/repeat_button"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
