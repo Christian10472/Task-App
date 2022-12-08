@@ -123,14 +123,53 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return taskInformationModel;
     }
 
+    /* Task retrieval methods */
+
+    public ArrayList<TaskInformationModel> getAllTasks(){
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TASK_TABLE,null);
+        return loadTaskListFromCursor(cursor);
+    }
 
     @SuppressLint("Range")
-    public ArrayList<TaskInformationModel> getAllTasks(){
+    public ArrayList<TaskInformationModel> getTasksDueToday(){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return getTasksDueOn(day, month, year);
+    }
+
+    public ArrayList<TaskInformationModel> getTasksDueOn(int day, int month, int year){
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TASK_TABLE + " WHERE " + COLUMN_TASK_DAY + " = " + day + " AND " +
+                COLUMN_TASK_YEAR + " = " + year + " AND " + COLUMN_TASK_MONTH + " = " + month,null);
+        return loadTaskListFromCursor(cursor);
+    }
+
+    // Returns list of tasks due within the next 7 days
+    public ArrayList<TaskInformationModel> getTasksDueSoon() {
         ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE,null);
-        for (int count = 0; count < cursor.getCount(); count++){
+        Calendar c = Calendar.getInstance();
+        for (int i = 0; i < 7; i ++){
+            c.add(Calendar.DATE, 1);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            int month = c.get(Calendar.MONTH) + 1;
+            int year = c.get(Calendar.YEAR);
+            result.addAll(getTasksDueOn(day, month, year));
+        }
+        return result;
+    }
+
+    public ArrayList<TaskInformationModel> getTasksDueInMonth(int month, int year){
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TASK_TABLE + " WHERE " + COLUMN_TASK_YEAR + "=" + year + " AND " + COLUMN_TASK_MONTH + "=" + month,null);
+        return loadTaskListFromCursor(cursor);
+    }
+
+    @SuppressLint("Range")
+    private ArrayList<TaskInformationModel> loadTaskListFromCursor(Cursor cursor){
+        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
+        for (int count = 0; count < cursor.getCount(); count ++){
             cursor.moveToPosition(count);
+
             TaskInformationModel task = new TaskInformationModel();
             task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
             task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
@@ -140,89 +179,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             task.setYear(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR)));
             task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
             task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
-            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
+
             result.add(task);
         }
         cursor.close();
-        return result;
-    }
-
-    // Todo: Use SQL Query to simplify algorithm
-    @SuppressLint("Range")
-    public ArrayList<TaskInformationModel> getTasksDueToday(){
-        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE,null);
-
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        for (int count = 0; count < cursor.getCount(); count ++){
-            cursor.moveToPosition(count);
-            int selectedYear = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR));
-            int selectedMonth = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MONTH));
-            int selectedDay = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_DAY));
-
-            if (selectedDay != day || selectedMonth != month || selectedYear != year) continue;
-
-            TaskInformationModel task = new TaskInformationModel();
-            task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
-            task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
-            task.setTaskPriority(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_PRIORITY)));
-            task.setMonth(selectedMonth);
-            task.setDay(selectedDay);
-            task.setYear(selectedYear);
-            task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
-            task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
-            task.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-            task.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_COMPLETE)) > 0);
-            result.add(task);
-        }
-        cursor.close();
-        return result;
-    }
-
-    @SuppressLint("Range")
-    public ArrayList<TaskInformationModel> getTasksDueOn(int day, int month, int year){
-        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE,null);
-        for (int count = 0; count < cursor.getCount(); count ++){
-            cursor.moveToPosition(count);
-            int selectedYear = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_YEAR));
-            int selectedMonth = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MONTH));
-            int selectedDay = cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_DAY));
-            if (selectedDay != day || selectedMonth != month || selectedYear != year) continue;
-            TaskInformationModel task = new TaskInformationModel();
-            task.setTaskName(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_NAME)));
-            task.setTaskType(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_TYPE)));
-            task.setTaskPriority(cursor.getString(cursor.getColumnIndex(COLUMN_TASK_PRIORITY)));
-            task.setMonth(selectedMonth);
-            task.setDay(selectedDay);
-            task.setYear(selectedYear);
-            task.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_HOUR)));
-            task.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_TASK_MINUTE)));
-            result.add(task);
-        }
-        cursor.close();
-        return result;
-    }
-
-    // Returns list of tasks due within the next 7 days
-    @SuppressLint("Range")
-    public ArrayList<TaskInformationModel> getTasksDueSoon() {
-        ArrayList<TaskInformationModel> result = new ArrayList<TaskInformationModel>();
-        Calendar c = Calendar.getInstance();
-        for (int i = 0; i < 7; i ++){
-            int day = c.get(Calendar.DAY_OF_MONTH);
-            int month = c.get(Calendar.MONTH) + 1;
-            int year = c.get(Calendar.YEAR);
-            result.addAll(getTasksDueOn(day, month, year));
-            c.add(Calendar.DATE, 1);
-        }
         return result;
     }
 }

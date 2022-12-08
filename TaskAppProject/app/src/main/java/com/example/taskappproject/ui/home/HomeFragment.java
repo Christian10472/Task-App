@@ -47,27 +47,27 @@ public class HomeFragment extends Fragment {
 
         // Populate list of items due today
         ArrayList<TaskInformationModel> tasksDueToday = DataBaseHelper.instance.getTasksDueToday();
+        ArrayList<String> tasksDueTodayNames = new ArrayList<String>();
+        ArrayList<String> tasksDueSoonNames = new ArrayList<String>();
         ListView todaysList = view.findViewById(R.id.todayItemsList);
-        ArrayList<String> taskNames = new ArrayList<String>();
         for (int i = 0; i < tasksDueToday.size(); i ++){
             if (tasksDueToday.get(i).getComplete()) continue;
-            taskNames.add(tasksDueToday.get(i).getTaskName());
+            tasksDueTodayNames.add(tasksDueToday.get(i).getTaskName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
-        todaysList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueTodayNames);
+        todaysList.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
 
         // Populate list of items due soon
         ArrayList<TaskInformationModel> tasksDueSoon = DataBaseHelper.instance.getTasksDueSoon();
         ListView soonList = view.findViewById(R.id.upcomingItemsList);
-        taskNames.clear();
         for (int i = 0; i < tasksDueSoon.size(); i ++){
             if (tasksDueSoon.get(i).getComplete()) continue;
-            taskNames.add(tasksDueSoon.get(i).getTaskName());
+            tasksDueSoonNames.add(tasksDueSoon.get(i).getTaskName());
         }
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, taskNames);
-        soonList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, tasksDueSoonNames);
+        soonList.setAdapter(adapter2);
+        adapter2.notifyDataSetChanged();
     }
     
     @Override
